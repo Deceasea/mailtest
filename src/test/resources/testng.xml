@@ -1,0 +1,9 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="MailRuTestSuite">
+    <test name="MailRuTest">
+        <classes>
+            <class name="ru.decease.mailtest.CreateDraftMailTests"/>
+            <!-- Добавьте другие классы с тестами по мере необходимости -->
+        </classes>
+    </test>
+</suite>
