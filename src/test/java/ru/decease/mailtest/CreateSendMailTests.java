@@ -1,10 +1,14 @@
 package ru.decease.mailtest;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+@Epic("Scenario 2")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CreateSendMailTests extends MainTestClass {
 
@@ -12,8 +16,10 @@ public class CreateSendMailTests extends MainTestClass {
     private static final String mailSubject = "Subject: " + draftMailSubject;
     private static final String mailBody = "Body: " + draftMailSubject;
 
+    @Feature("Steps to check scenario")
     @Test
     @Order(5)
+    @Description("Login")
     public void testLoginToMailRu() {
         // Нажатие кнопки входа
         WebElement loginButton = getDriver().findElement(loginButtonLocator);
@@ -51,12 +57,14 @@ public class CreateSendMailTests extends MainTestClass {
 
     @Test
     @Order(10)
+    @Description("Crate mail")
     public void testCreateMail() {
         WebElement writeMailButton = getDriver().findElement(writeMailLocator);
         writeMailButton.click();
 
+        getDriverWait().until(ExpectedConditions.numberOfElementsToBe(toInputLocator, 1));
         WebElement toInputField = getDriver().findElement(toInputLocator);
-        toInputField.sendKeys(mailTo);
+        toInputField.sendKeys(username + "@mail.ru");
 
         WebElement subjectInputField = getDriver().findElement(subjectInputLocator);
         subjectInputField.sendKeys(mailSubject);
@@ -65,53 +73,62 @@ public class CreateSendMailTests extends MainTestClass {
         bodyInputField.click();
         bodyInputField.sendKeys(mailBody);
 
-        WebElement saveMailButton = getDriver().findElement(saveButtonMailLocator);
-        saveMailButton.click();
-
-        WebElement closeModalMailButton = getDriver().findElement(closeModalMailLocator);
-        closeModalMailButton.click();
+        WebElement sendMailButton = getDriver().findElement(sendButtonMailLocator);
+        sendMailButton.click();
 
         getDriverWait().until(ExpectedConditions.numberOfElementsToBe(By.className("compose-app__compose"), 0));
     }
 
     @Test
     @Order(15)
-    public void testFindDraftMail() {
-        getDriver().get("https://e.mail.ru/drafts/");
+    @Description("Find mail")
+    public void testFindInboxMail() {
+        getDriver().get("https://e.mail.ru/tomyself/");
 
-        WebElement draftMail = getDriver().findElement(By.xpath("//*[contains(text(), '" + draftMailSubject + "')]"));
-        draftMail.click();
+        WebElement sentMail = getDriver().findElement(By.xpath("//*[contains(text(), '" + mailSubject + "')]"));
+        sentMail.click();
 
-        WebElement draftMailTo = getDriver().findElement(By.xpath("//*[contains(text(), '" + mailTo + "')]"));
-        Assertions.assertTrue(draftMailTo.isDisplayed());
+        WebElement sentMailTo = getDriver().findElement(By.xpath("//*[contains(text(), '" + username + "@mail.ru')]"));
+        Assertions.assertTrue(sentMailTo.getText().contains("Ирина Веселова"));
 
-        WebElement draftMailSubject = getDriver().findElement(By.xpath("//*[contains(text(), '" + mailSubject + "')]"));
-        Assertions.assertTrue(draftMailSubject.isDisplayed());
+        WebElement sentMailSubject = getDriver().findElement(By.xpath("//*[contains(text(), '" + mailSubject + "')]"));
+        Assertions.assertTrue(sentMailSubject.isDisplayed());
 
-        WebElement draftMailBody = getDriver().findElement(By.xpath("//*[contains(text(), '" + mailBody + "')]"));
-        Assertions.assertTrue(draftMailBody.isDisplayed());
+        WebElement sentMailBody = getDriver().findElement(By.xpath("//*[contains(text(), '" + mailBody + "')]"));
+        Assertions.assertTrue(sentMailBody.isDisplayed());
     }
 
     @Test
     @Order(20)
-    public void testSendDraftMail() {
-        WebElement sendButtonMailButton = getDriver().findElement(sendButtonMailLocator);
-        sendButtonMailButton.click();
+    @Description("Delete mail")
+    public void testDeleteInboxMail() {
+        WebElement deleteMailButton = getDriver().findElement(deleteMailLocator);
+        deleteMailButton.click();
 
-        getDriverWait().until(ExpectedConditions.numberOfElementsToBe(By.xpath("//*[contains(text(), '" + draftMailSubject + "')]"), 0));
     }
 
     @Test
     @Order(25)
-    public void testSentMail() {
-        getDriver().get("https://e.mail.ru/sent/");
+    @Description("Check trash")
+    public void testCheckTrash() {
+        getDriver().get("https://e.mail.ru/trash/");
 
-        WebElement sentMail = getDriver().findElement(By.xpath("//*[contains(text(), '" + draftMailSubject + "')]"));
-        Assertions.assertTrue(sentMail.isDisplayed());
+        WebElement sentMail = getDriver().findElement(By.xpath("//*[contains(text(), '" + mailSubject + "')]"));
+        sentMail.click();
+
+        WebElement sentMailTo = getDriver().findElement(By.xpath("//*[contains(text(), '" + username + "@mail.ru')]"));
+        Assertions.assertTrue(sentMailTo.getText().contains("Ирина Веселова"));
+
+        WebElement sentMailSubject = getDriver().findElement(By.xpath("//*[contains(text(), '" + mailSubject + "')]"));
+        Assertions.assertTrue(sentMailSubject.isDisplayed());
+
+        WebElement sentMailBody = getDriver().findElement(By.xpath("//*[contains(text(), '" + mailBody + "')]"));
+        Assertions.assertTrue(sentMailBody.isDisplayed());
     }
 
     @Test
     @Order(30)
+    @Description("Exit from serrvice")
     public void testExitFromMail() {
         WebElement avatarMailButton = getDriver().findElement(avatarMailLocator);
         avatarMailButton.click();
