@@ -18,8 +18,8 @@ public class MainTestClass {
     private static WebDriver driver;
 
     // Ваш логин и пароль
-    String username = "IrinaVeselov";
-    String password = "MySuperPuperPassword123";
+    String username = "irina.veselova";
+    String password = "Dfghdjemk2345678";
 
     By loginButtonLocator = By.xpath("//button[contains(text(), 'Войти')]");
     By iframeLocator = By.className("ag-popup__frame__layout__iframe");
@@ -37,6 +37,7 @@ public class MainTestClass {
     By closeModalMailLocator = By.xpath("//button[@title='Закрыть']");
     By avatarMailLocator = By.xpath("//div[@data-testid='whiteline-account']");
     By exitMailLocator = By.xpath("//div[@data-testid='whiteline-account-exit']");
+    By deleteMailLocator = By.xpath("//span[@data-title-shortcut='Del']");
 
     public static String draftMailSubject = UUID.randomUUID().toString();
 
@@ -64,13 +65,14 @@ public class MainTestClass {
     }
 
     public static WebDriverWait getDriverWait() {
-        return new WebDriverWait(getDriver(), Duration.ofSeconds(5L));
+        return new WebDriverWait(getDriver(), Duration.ofSeconds(30L));
     }
 
     public static WebDriver createDriver() {
         WebDriverManager.chromedriver().setup();
         System.setProperty("webdriver.chrome.driver", "src/test/resources/chromedriver/chromedriver");
         ChromeOptions options = new ChromeOptions();
+        options.addArguments("--window-size=1920,1080");
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--remote-debugging-port=9222");
@@ -80,7 +82,7 @@ public class MainTestClass {
         options.addArguments("start-maximized");
         options.addArguments("--remote-allow-origins=*");
         driver = new ChromeDriver(options);
-        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         return driver;
     }
 

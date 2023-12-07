@@ -1,10 +1,14 @@
 package ru.decease.mailtest;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+@Epic("Scenario 1")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CreateDraftMailTests extends MainTestClass {
 
@@ -12,6 +16,8 @@ public class CreateDraftMailTests extends MainTestClass {
     private static final String mailSubject = "Subject: " + draftMailSubject;
     private static final String mailBody = "Body: " + draftMailSubject;
 
+    @Feature("Draft Mail")
+    @Description("Login")
     @Test
     @Order(5)
     public void testLoginToMailRu() {
@@ -51,6 +57,7 @@ public class CreateDraftMailTests extends MainTestClass {
 
     @Test
     @Order(10)
+    @Description("Create mail")
     public void testCreateMail() {
         WebElement writeMailButton = getDriver().findElement(writeMailLocator);
         writeMailButton.click();
@@ -76,6 +83,7 @@ public class CreateDraftMailTests extends MainTestClass {
 
     @Test
     @Order(15)
+    @Description("Draft mail")
     public void testFindDraftMail() {
         getDriver().get("https://e.mail.ru/drafts/");
 
@@ -94,6 +102,7 @@ public class CreateDraftMailTests extends MainTestClass {
 
     @Test
     @Order(20)
+    @Description("Send draft")
     public void testSendDraftMail() {
         WebElement sendButtonMailButton = getDriver().findElement(sendButtonMailLocator);
         sendButtonMailButton.click();
@@ -103,6 +112,7 @@ public class CreateDraftMailTests extends MainTestClass {
 
     @Test
     @Order(25)
+    @Description("Check sent mail")
     public void testSentMail() {
         getDriver().get("https://e.mail.ru/sent/");
 
@@ -112,6 +122,7 @@ public class CreateDraftMailTests extends MainTestClass {
 
     @Test
     @Order(30)
+    @Description("Exit from service")
     public void testExitFromMail() {
         WebElement avatarMailButton = getDriver().findElement(avatarMailLocator);
         avatarMailButton.click();
